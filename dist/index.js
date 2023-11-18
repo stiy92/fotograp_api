@@ -6,7 +6,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const server_1 = __importDefault(require("./class/server"));
 const usuarios_1 = __importDefault(require("./rutas/usuarios"));
+const post_1 = __importDefault(require("./rutas/post"));
 const body_parser_1 = __importDefault(require("body-parser"));
+const express_fileupload_1 = __importDefault(require("express-fileupload"));
+const cors_1 = __importDefault(require("cors"));
 //A1 constante del server para usar la extancia de express servidor
 const server = new server_1.default;
 //===============================fin A1======================
@@ -27,10 +30,15 @@ server.start(() => {
     console.log(`El servidor esta corriendo en el puerto ${server.port}`);
 });
 //=====================fin A2 ======================
-// A3 rutas
-server.app.use('/user', usuarios_1.default);
-// fin A3
+// user Cors
+server.app.use((0, cors_1.default)({ origin: true, credentials: true }));
 //=====================fin route ======================
-// A3 rutas
-server.app.use('/posts', postRoutes);
-// fin A3
+// FileUpload
+server.app.use((0, express_fileupload_1.default)());
+// fin FileUpload
+// user rutas
+server.app.use('/user', usuarios_1.default);
+// fin rutas
+// post rutas
+server.app.use('/posts', post_1.default);
+// fin post rutas

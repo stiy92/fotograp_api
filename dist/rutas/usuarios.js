@@ -62,6 +62,7 @@ UserRoutes.post('/create', (req, res) => {
         password: bcrypt_1.default.hashSync(req.body.password, 10)
     };
     //guardo en la base de datos 
+    // tener encuenta una variable como randon para cambiar el toquen cada inicio de sesión
     usuario_model_1.Usuario.create(user).then(userDB => {
         const tokenUser = tokens_1.default.getJwToken({
             _id: userDB._id,
@@ -109,6 +110,14 @@ UserRoutes.post('/update', autenticacion_1.verificaToken, (req, res) => {
             ok: false,
             mensaje: 'Error con la verificacion del token'
         });
+    });
+});
+// validar usuario con token
+UserRoutes.get('/', [autenticacion_1.verificaToken], (req, res) => {
+    const usuario = req.usuario;
+    res.json({
+        ok: true,
+        usuario
     });
 });
 exports.default = UserRoutes;

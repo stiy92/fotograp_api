@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 import Server from "./class/server";
 import UserRoutes from "./rutas/usuarios";
+import postRoutes from "./rutas/post";
 import bodyParser from "body-parser";
+import fileUpload from "express-fileupload";
+import cors from "cors";
 
 //A1 constante del server para usar la extancia de express servidor
 const server = new Server;
@@ -28,18 +31,25 @@ server.start(()=>{
     
 })
 //=====================fin A2 ======================
-
-// A3 rutas
-server.app.use('/user', UserRoutes);
-
-// fin A3
-
+// user Cors
+server.app.use(cors({ origin: true, credentials: true}));
 //=====================fin route ======================
 
-// A3 rutas
+
+// FileUpload
+server.app.use( fileUpload());
+// fin FileUpload
+
+// user rutas
+server.app.use('/user', UserRoutes);
+
+// fin rutas
+
+// post rutas
 server.app.use('/posts', postRoutes);
 
-// fin A3
+// fin post rutas
+
 
 
 

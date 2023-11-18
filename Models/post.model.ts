@@ -1,6 +1,7 @@
 import { Schema, Document, model } from "mongoose";
+import mongoose from 'mongoose';
 
-const postSchema = new Schema({
+const postSchema = new mongoose.Schema({
 
     created: {
         type: Date
@@ -9,18 +10,21 @@ const postSchema = new Schema({
     mensaje: {
         type: String
     },
-    img: {
+    imgs: [{
         type: String
-    },
+    }],
+    
+
     coords: {
         type: String  //-13.3333
     },
 
     usuario:{
-        type: Schema.Types.ObjectId,
-        ref: 'Usuario',
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'usuario',
         required: [true, 'Debe de existir una referencia a un usuario']
     }
+
 });
 
 // guardar fecha y se le anexa una interfaz
@@ -39,4 +43,4 @@ interface Ipost extends Document {
 
 }
 
-export const Post = model<Ipost>('post', postSchema);
+export const Post = mongoose.model<Ipost>('post', postSchema);

@@ -59,6 +59,7 @@ UserRoutes.post('/create', (req: Request, res: Response) => {
     }
 
     //guardo en la base de datos 
+    // tener encuenta una variable como randon para cambiar el toquen cada inicio de sesión
 Usuario.create(user).then(userDB =>{
 
         const tokenUser = TOKEN.getJwToken({
@@ -123,6 +124,16 @@ UserRoutes.post('/update', verificaToken, (req:any, res: Response)=> {
     }); 
         });
 
+        // validar usuario con token
+        UserRoutes.get('/', [verificaToken], ( req: any, res: Response)=>{
+
+            const usuario = req.usuario;
+
+            res.json({
+                ok: true,
+                usuario
+            });
+        })
 
 
 export default UserRoutes;
