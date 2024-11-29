@@ -21,6 +21,15 @@ mongoose_1.default.connect('mongodb://127.0.0.1:27017/fotosgram')
     if (err)
         throw err;
 });
+mongoose_1.default.connection.on('connected', () => {
+    console.log('Base de datos online');
+});
+mongoose_1.default.connection.on('error', (err) => {
+    console.error('Error en la conexión a la base de datos:', err.message);
+});
+mongoose_1.default.connection.on('disconnected', () => {
+    console.log('Base de datos desconectada');
+});
 //middleware with bodyparser pasa estos parametros primero estos middleware deben de ir de primero ya que cuando pase la ruta user deben de existir los datos para el registro
 server.app.use(body_parser_1.default.urlencoded({ extended: true }));
 server.app.use(body_parser_1.default.json());

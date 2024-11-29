@@ -1,9 +1,11 @@
 import Jwt  from "jsonwebtoken";
 
 export default class TOKEN{
-
-    private static token: string= 'this-is-my-seed';
-    private static caducida: string= '30d';
+    
+    private static secret: string = "this-is-my-seed"; // Clave secreta
+    // private static token: string= 'this-is-my-seed';
+    private static expiration: string = "30d"; // Tiempo de expiración del token
+    // private static caducida: string= '30d';
     
     constructor(){
 
@@ -14,16 +16,17 @@ export default class TOKEN{
 // firma
         return Jwt.sign({
             usuario: payload
-        }, this.token, {expiresIn: this.caducida});
+        }, this.secret, {expiresIn: this.expiration});
     }
 
 //comparo los datos que vienen 
-static comprobarToken( userToken: string){
+static comprobarToken( userToken: string): Promise<any> { 
 return new Promise((resolve, reject)=>{
 
-    Jwt.verify(userToken, this.token, (err, decoded)=> {
+    Jwt.verify(userToken, this.secret, (err, decoded)=> {
         if (err) {
-               reject();
+            console.error("Error al verificar el token:", err); // Log para depuración
+               reject(err);
         } else {
             resolve( decoded);
         }

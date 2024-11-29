@@ -49,7 +49,11 @@ UserRoutes.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, functi
         }
     }
     catch (err) {
-        throw err;
+        console.error('Error en /login:', err);
+        res.status(500).json({
+            ok: false,
+            mensaje: 'Error interno del servidor',
+        });
     }
 }));
 // ruta para crear usuario
@@ -83,12 +87,14 @@ UserRoutes.post('/create', (req, res) => {
 });
 //ruta update usuario
 UserRoutes.post('/update', autenticacion_1.verificaToken, (req, res) => {
+    console.log('Usuario en req.usuario:', req.usuario); // Verifica que req.usuario esté presente y correcto
     const user = {
         nombre: req.body.nombre || req.usuario.nombre,
         email: req.body.email || req.usuario.email,
         avatar: req.body.avatar || req.usuario.avatar,
     };
-    usuario_model_1.Usuario.findOneAndUpdate(req.usuario._id, user, { new: true }).then((userDB) => {
+    usuario_model_1.Usuario.findOneAndUpdate({ _id: req.usuario._id }, user, { new: true }).then((userDB) => {
+        console.log('Usuario actualizado:', userDB); // Verifica los datos de userDB
         if (!userDB) {
             return res.json({
                 ok: false,
@@ -106,6 +112,7 @@ UserRoutes.post('/update', autenticacion_1.verificaToken, (req, res) => {
             token: tokenUser
         });
     }).catch(err => {
+        console.error('Error en la actualización:', err);
         res.json({
             ok: false,
             mensaje: 'Error con la verificacion del token'
